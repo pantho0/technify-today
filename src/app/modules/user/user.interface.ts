@@ -1,3 +1,5 @@
+import { Model } from "mongoose";
+
 export interface IUser {
   firstName: string;
   middleName?: string;
@@ -11,4 +13,12 @@ export interface IUser {
   isDeleted?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
+}
+
+export interface UserModel extends Model<IUser> {
+  isUserExists(email: string): Promise<IUser | null>;
+  isPasswordMatched(
+    plainTextPassword: string,
+    hashedPassword: string,
+  ): Promise<boolean>;
 }
