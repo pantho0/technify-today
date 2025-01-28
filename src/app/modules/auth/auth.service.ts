@@ -1,14 +1,15 @@
+import status from "http-status";
 import config from "../../config";
+import AppError from "../../errors/AppError";
 import { User } from "../user/user.model";
 import { IUserLogin } from "./auth.interface";
 import { createToken } from "./auth.utils";
 
 const loginUser = async (payload: IUserLogin) => {
   const user = await User.findOne({ email: payload.email }).select("+password");
-  console.log(user);
 
   if (!(await User.isPasswordMatched(payload?.password, user!.password))) {
-    throw new Error("Invalid credentials");
+    throw new AppError(status.BAD_REQUEST, "Invalid email or password");
   }
 
   const jwtPayload = {
