@@ -6,7 +6,7 @@ import { IUserLogin } from "./auth.interface";
 import { createToken } from "./auth.utils";
 
 const loginUser = async (payload: IUserLogin) => {
-  const user = await User.findOne({ email: payload.email }).select("+password");
+  const user = await User.isUserExists(payload.email);
 
   if (!(await User.isPasswordMatched(payload?.password, user!.password))) {
     throw new AppError(status.BAD_REQUEST, "Invalid email or password");
