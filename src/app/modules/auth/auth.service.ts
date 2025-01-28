@@ -2,7 +2,6 @@ import config from "../../config";
 import { User } from "../user/user.model";
 import { IUserLogin } from "./auth.interface";
 import { createToken } from "./auth.utils";
-import bcrypt from "bcrypt";
 
 const loginUser = async (payload: IUserLogin) => {
   const user = await User.findOne({ email: payload.email }).select("+password");
