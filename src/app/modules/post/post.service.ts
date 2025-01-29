@@ -11,7 +11,13 @@ const getPostsFromDB = async () => {
   return result;
 };
 
+const postUpdate = async (id: string, payload: Partial<IPost>) => {
+  const result = await Post.findByIdAndUpdate(id, payload, { new: true });
+  return result;
+};
+
 export const PostServices = {
   createPostIntoDB,
   getPostsFromDB,
+  postUpdate,
 };
