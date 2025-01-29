@@ -50,4 +50,12 @@ const postSchema = new Schema<IPost>(
   },
 );
 
+postSchema.pre("find", async function () {
+  this.find({ isDeleted: { $ne: true } });
+});
+
+postSchema.pre("findOne", async function () {
+  this.find({ isDeleted: { $ne: true } });
+});
+
 export const Post = model<IPost>("Post", postSchema);
