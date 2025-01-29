@@ -7,8 +7,8 @@ export interface IPost {
   category: string;
   details: string;
   isPremium: boolean;
-  upVote: number;
-  downVote: number;
+  upVote: Types.ObjectId[];
+  downVote: Types.ObjectId[];
   comments: Types.ObjectId[];
   isDeleted: boolean;
   createdAt: string;

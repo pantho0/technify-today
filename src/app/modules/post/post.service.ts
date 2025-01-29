@@ -16,6 +16,30 @@ const postUpdateIntoDB = async (id: string, payload: Partial<IPost>) => {
   return result;
 };
 
+const addUpVoteIntoPost = async (postId: string, userId: string) => {
+  const result = await Post.findByIdAndUpdate(
+    postId,
+    {
+      $addToSet: { upVote: userId },
+      $pull: { downVote: userId },
+    },
+    { new: true },
+  );
+  return result;
+};
+
+const addDownVoteIntoPost = async (postId: string, userId: string) => {
+  const result = await Post.findByIdAndUpdate(
+    postId,
+    {
+      $addToSet: { downVote: userId },
+      $pull: { upVote: userId },
+    },
+    { new: true },
+  );
+  return result;
+};
+
 const deletePostFromDB = async (id: string) => {
   const result = await Post.findByIdAndUpdate(
     id,
@@ -30,4 +54,6 @@ export const PostServices = {
   getPostsFromDB,
   postUpdateIntoDB,
   deletePostFromDB,
+  addUpVoteIntoPost,
+  addDownVoteIntoPost,
 };

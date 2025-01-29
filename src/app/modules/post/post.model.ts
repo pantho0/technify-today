@@ -28,12 +28,14 @@ const postSchema = new Schema<IPost>(
       default: false,
     },
     upVote: {
-      type: Number,
-      default: 0,
+      type: [Schema.Types.ObjectId],
+      ref: "User",
+      default: [],
     },
     downVote: {
-      type: Number,
-      default: 0,
+      type: [Schema.Types.ObjectId],
+      ref: "User",
+      default: [],
     },
     comments: {
       type: [Schema.Types.ObjectId],
