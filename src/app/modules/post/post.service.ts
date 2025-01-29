@@ -6,6 +6,12 @@ const createPostIntoDB = async (payload: IPost) => {
   return result;
 };
 
+const getPostsFromDB = async () => {
+  const result = await Post.find();
+  return result;
+};
+
 export const PostServices = {
   createPostIntoDB,
+  getPostsFromDB,
 };
