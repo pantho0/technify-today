@@ -36,6 +36,28 @@ const updatePost = catchAsync(async (req, res) => {
   });
 });
 
+const upVote = catchAsync(async (req, res) => {
+  const { postId, userId } = req.body;
+  const result = await PostServices.addUpVoteIntoPost(postId, userId);
+  sendResponse(res, {
+    statusCode: status.OK,
+    success: true,
+    message: "Upvoted successfully",
+    data: result,
+  });
+});
+
+const downVote = catchAsync(async (req, res) => {
+  const { postId, userId } = req.body;
+  const result = await PostServices.addDownVoteIntoPost(postId, userId);
+  sendResponse(res, {
+    statusCode: status.OK,
+    success: true,
+    message: "Upvoted successfully",
+    data: result,
+  });
+});
+
 const deletePost = catchAsync(async (req, res) => {
   const { id } = req.params;
   const result = await PostServices.deletePostFromDB(id);
@@ -52,4 +74,6 @@ export const PostControllers = {
   getPosts,
   updatePost,
   deletePost,
+  upVote,
+  downVote,
 };
