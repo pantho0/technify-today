@@ -7,7 +7,7 @@ const createPostIntoDB = async (payload: IPost) => {
 };
 
 const getPostsFromDB = async () => {
-  const result = await Post.find().populate("user");
+  const result = await Post.find().populate(["user", "comments"]);
   return result;
 };
 
