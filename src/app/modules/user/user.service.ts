@@ -15,7 +15,7 @@ const createUserIntoDB = async (payload: IUser) => {
 };
 
 const getAllUserFromDB = async () => {
-  const result = await User.find();
+  const result = await User.find().populate(["following", "followedBy"]);
   return result;
 };
 

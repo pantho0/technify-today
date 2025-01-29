@@ -14,6 +14,18 @@ const addFollow = catchAsync(async (req, res) => {
   });
 });
 
+const removeFollowers = catchAsync(async (req, res) => {
+  const followData = req.body;
+  const result = await FollowerServices.removeFollowersFromDB(followData);
+  sendResponse(res, {
+    statusCode: status.OK,
+    success: true,
+    message: "Unfollowed Successfully",
+    data: result,
+  });
+});
+
 export const FollowersController = {
   addFollow,
+  removeFollowers,
 };

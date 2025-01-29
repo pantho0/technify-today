@@ -38,9 +38,11 @@ const userSchema = new Schema<IUser, UserModel>(
     },
     following: {
       type: [Schema.Types.ObjectId],
+      ref: "User",
     },
     followedBy: {
       type: [Schema.Types.ObjectId],
+      ref: "User",
     },
     isPremium: {
       type: Boolean,

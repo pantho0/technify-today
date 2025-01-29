@@ -7,16 +7,34 @@ const addFollowersIntoDB = async (payload: IFollower) => {
   const result = await Follower.create(payload);
   if (result) {
     await User.findByIdAndUpdate(payload.followedBy, {
-      $push: { following: payload.following },
+      $addToSet: { following: payload.following },
     });
     await User.findByIdAndUpdate(payload.following, {
-      $push: { followedBy: payload.followedBy },
+      $addToSet: { followedBy: payload.followedBy },
     });
   }
 
   return result;
 };
 
+const removeFollowersFromDB = async (payload: IFollower) => {
+  const result = await Follower.findOneAndDelete({
+    following: payload.following,
+    followedBy: payload.followedBy,
+  });
+
+  if (result) {
+    await User.findByIdAndUpdate(payload.followedBy, {
+      $pull: { following: payload.following },
+    });
+    await User.findByIdAndUpdate(payload.following, {
+      $pull: { followedBy: payload.followedBy },
+    });
+  }
+  return result;
+};
+
 export const FollowerServices = {
   addFollowersIntoDB,
+  removeFollowersFromDB,
 };
