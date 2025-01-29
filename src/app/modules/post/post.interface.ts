@@ -10,5 +10,6 @@ export interface IPost {
   upVote: number;
   downVote: number;
   comments: Types.ObjectId[];
+  isDeleted: boolean;
   createdAt: string;
 }

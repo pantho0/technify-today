@@ -40,6 +40,10 @@ const postSchema = new Schema<IPost>(
       ref: "Comment",
       default: [],
     },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
