@@ -3,6 +3,7 @@ import { UserRoutes } from "../modules/user/user.route";
 import { AuthRoutes } from "../modules/auth/auth.route";
 import { PostRoutes } from "../modules/post/post.route";
 import { CommentRoutes } from "../modules/comment/comment.route";
+import { FollowerRoutes } from "../modules/follower/follower.route";
 
 const router = Router();
 
@@ -18,6 +19,10 @@ const moduleRoutes = [
   {
     path: "/comment",
     route: CommentRoutes,
+  },
+  {
+    path: "/followers",
+    route: FollowerRoutes,
   },
   {
     path: "/login",

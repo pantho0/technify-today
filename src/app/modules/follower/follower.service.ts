@@ -2,14 +2,14 @@ import { User } from "../user/user.model";
 import { IFollower } from "./follower.interface";
 import { Follower } from "./follower.model";
 
-const addFollowers = async (payload: IFollower) => {
+const addFollowersIntoDB = async (payload: IFollower) => {
   const result = await Follower.create(payload);
   if (result) {
-    await User.findByIdAndUpdate(payload.followed, {
-      $push: { followers: payload.follower },
+    await User.findByIdAndUpdate(payload.followedBy, {
+      $push: { followers: payload.following },
     });
-    await User.findByIdAndUpdate(payload.follower, {
-      $push: { followed: payload.followed },
+    await User.findByIdAndUpdate(payload.following, {
+      $push: { followed: payload.followedBy },
     });
   }
 
@@ -17,5 +17,5 @@ const addFollowers = async (payload: IFollower) => {
 };
 
 export const FollowerServices = {
-  addFollowers,
+  addFollowersIntoDB,
 };

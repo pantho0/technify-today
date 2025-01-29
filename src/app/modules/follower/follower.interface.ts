@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 
 export interface IFollower {
-  follower: Types.ObjectId;
-  followed: Types.ObjectId;
+  following: Types.ObjectId;
+  followedBy: Types.ObjectId;
   createdAt: string;
 }
