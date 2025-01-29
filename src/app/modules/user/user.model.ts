@@ -36,6 +36,12 @@ const userSchema = new Schema<IUser, UserModel>(
       type: String,
       required: false,
     },
+    followers: {
+      type: [Schema.Types.ObjectId],
+    },
+    followed: {
+      type: [Schema.Types.ObjectId],
+    },
     isPremium: {
       type: Boolean,
       default: false,

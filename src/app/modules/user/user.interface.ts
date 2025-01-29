@@ -9,6 +9,8 @@ export interface IUser {
   password: string;
   role?: "admin" | "user";
   profileImage?: string;
+  followers?: Types.ObjectId[] | [];
+  followed?: Types.ObjectId[] | [];
   isPremium?: boolean;
   isBlocked?: boolean;
   isDeleted?: boolean;
