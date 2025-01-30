@@ -63,9 +63,9 @@ const userSchema = new Schema<IUser, UserModel>(
   },
 );
 
-// userSchema.statics.isUserExists = async function (email) {
-//   return await User.findOne({ email: email }).select("+password");
-// };
+userSchema.statics.isUserExists = async function (email) {
+  return await User.findOne({ email: email }).select("+password");
+};
 
 userSchema.pre("save", async function (next) {
   const user = this as IUser;
