@@ -3,22 +3,32 @@
 import { ErrorRequestHandler } from "express";
 import { TErrorSources } from "../interface/error";
 import config from "../config";
+import { ZodError } from "zod";
+import handleZodError from "../errors/handleZodError";
 
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next): any => {
-  const statusCode = 500;
-  const message = err.message || "Internal Server Error";
-  const errorSources: TErrorSources = [
+  let statusCode = 500;
+  let message = err.message || "Internal Server Error";
+  let errorSources: TErrorSources = [
     {
       path: "",
       messsage: "Internal Server Error",
     },
   ];
 
+  if (err instanceof ZodError) {
+    const simplifiedError = handleZodError(err);
+    statusCode = simplifiedError?.statusCode;
+    message = simplifiedError?.message;
+    errorSources = simplifiedError?.errorSources;
+  }
+
   return res.status(statusCode).json({
     success: false,
     message,
+    // err,
     errorSources,
-    stack: config.NODE_ENV === "development" ? err?.stack : null,
+    // stack: config.NODE_ENV === "development" ? err?.stack : null,
   });
 };
 
