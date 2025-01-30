@@ -8,7 +8,7 @@ const router = Router();
 router.get("/", PostControllers.getPosts);
 router.patch(
   "/update-post/:id",
-  // validateRequest(PostValidation.updatePostValidationSchema),
+  validateRequest(PostValidation.updatePostValidationSchema),
   PostControllers.updatePost,
 );
 router.put("/delete-post/:id", PostControllers.deletePost);

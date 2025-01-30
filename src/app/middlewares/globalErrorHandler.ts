@@ -8,14 +8,15 @@ import handleZodError from "../errors/handleZodError";
 import handleValidationError from "../errors/handleValidationError";
 import handleDuplicateError from "../errors/handleDuplicateError";
 import handleCastError from "../errors/handleCastError";
+import AppError from "../errors/AppError";
 
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next): any => {
   let statusCode = 500;
-  let message = err.message || "Internal Server Error";
+  let message = err.message || "Something Went Wrong";
   let errorSources: TErrorSources = [
     {
       path: "",
-      messsage: "Internal Server Error",
+      messsage: "Something Went Wrong",
     },
   ];
 
@@ -39,12 +40,28 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next): any => {
     statusCode = simplifiedError?.statusCode;
     message = simplifiedError?.message;
     errorSources = simplifiedError?.errorSources;
+  } else if (err instanceof AppError) {
+    statusCode = err.statusCode;
+    message = err.message;
+    errorSources = [
+      {
+        path: "",
+        messsage: err?.message,
+      },
+    ];
+  } else if (err instanceof Error) {
+    message = err.message;
+    errorSources = [
+      {
+        path: "",
+        messsage: err?.message,
+      },
+    ];
   }
 
   return res.status(statusCode).json({
     success: false,
     message,
-    err,
     errorSources,
     stack: config.NODE_ENV === "development" ? err?.stack : null,
   });
