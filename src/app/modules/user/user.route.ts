@@ -1,14 +1,14 @@
 import { Router } from "express";
 import { UserControllers } from "./user.controller";
 import validateRequest from "../../middlewares/validateRequest";
-import { userValidation } from "./user.validation";
+import { UserValidation } from "./user.validation";
 
 const router = Router();
 
 router.get("/", UserControllers.getAllUser);
 router.post(
   "/create-user",
-  validateRequest(userValidation.userValidationSchema),
+  validateRequest(UserValidation.userValidationSchema),
   UserControllers.createUser,
 );
 
