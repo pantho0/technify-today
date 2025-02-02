@@ -8,6 +8,10 @@ import { createToken } from "./auth.utils";
 const loginUser = async (payload: IUserLogin) => {
   const user = await User.isUserExists(payload.email);
 
+  if (!user) {
+    throw new AppError(status.NOT_FOUND, "User not found");
+  }
+
   if (!(await User.isPasswordMatched(payload?.password, user!.password))) {
     throw new AppError(status.BAD_REQUEST, "Invalid email or password");
   }
