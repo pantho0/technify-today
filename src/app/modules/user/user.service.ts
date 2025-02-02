@@ -2,7 +2,6 @@ import status from "http-status";
 import AppError from "../../errors/AppError";
 import { IUser } from "./user.interface";
 import { User } from "./user.model";
-import { path } from "path";
 
 const createUserIntoDB = async (payload: IUser) => {
   const isExist = await User.isUserExists(payload.email);
