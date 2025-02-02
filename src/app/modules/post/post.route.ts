@@ -7,21 +7,23 @@ import { USER_ROLE } from "../user/user.const";
 
 const router = Router();
 
-router.get(
-  "/",
-  auth(USER_ROLE.user, USER_ROLE.admin),
-  PostControllers.getPosts,
-);
+router.get("/", PostControllers.getPosts);
 router.patch(
   "/update-post/:id",
+  auth(USER_ROLE.admin, USER_ROLE.user),
   validateRequest(PostValidation.updatePostValidationSchema),
   PostControllers.updatePost,
 );
-router.put("/delete-post/:id", PostControllers.deletePost);
+router.put(
+  "/delete-post/:id",
+  auth(USER_ROLE.admin, USER_ROLE.user),
+  PostControllers.deletePost,
+);
 router.put("/upvote", PostControllers.upVote);
 router.put("/downvote", PostControllers.downVote);
 router.post(
   "/create-post",
+  auth(USER_ROLE.admin, USER_ROLE.user),
   validateRequest(PostValidation.createPostValidationSchema),
   PostControllers.createPost,
 );
