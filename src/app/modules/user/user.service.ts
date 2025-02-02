@@ -19,7 +19,16 @@ const getAllUserFromDB = async () => {
   return result;
 };
 
+const getMeFromDB = async (id: string) => {
+  const result = await User.findById(id);
+  if (!result) {
+    throw new AppError(status.NOT_FOUND, "User not found");
+  }
+  return result;
+};
+
 export const UserServices = {
   createUserIntoDB,
   getAllUserFromDB,
+  getMeFromDB,
 };
