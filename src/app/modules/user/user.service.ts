@@ -2,6 +2,7 @@ import status from "http-status";
 import AppError from "../../errors/AppError";
 import { IUser } from "./user.interface";
 import { User } from "./user.model";
+import { path } from "path";
 
 const createUserIntoDB = async (payload: IUser) => {
   const isExist = await User.isUserExists(payload.email);
@@ -20,7 +21,15 @@ const getAllUserFromDB = async () => {
 };
 
 const getMeFromDB = async (id: string) => {
-  const result = await User.findById(id);
+  const result = await User.findById(id)
+    .populate({
+      path: "following",
+      select: "firstName lastName profileImage",
+    })
+    .populate({
+      path: "followedBy",
+      select: "firstName lastName profileImage",
+    });
   if (!result) {
     throw new AppError(status.NOT_FOUND, "User not found");
   }
