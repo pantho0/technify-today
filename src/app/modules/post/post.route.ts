@@ -2,10 +2,17 @@ import { Router } from "express";
 import { PostControllers } from "./post.controller";
 import validateRequest from "../../middlewares/validateRequest";
 import { PostValidation } from "./post.validation";
+import auth from "../../middlewares/auth";
+import { USER_ROLE } from "../user/user.const";
+import { USER_ROLE } from "./../user/user.const";
 
 const router = Router();
 
-router.get("/", PostControllers.getPosts);
+router.get(
+  "/",
+  auth(USER_ROLE.user, USER_ROLE.admin),
+  PostControllers.getPosts,
+);
 router.patch(
   "/update-post/:id",
   validateRequest(PostValidation.updatePostValidationSchema),
