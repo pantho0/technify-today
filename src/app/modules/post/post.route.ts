@@ -4,7 +4,6 @@ import validateRequest from "../../middlewares/validateRequest";
 import { PostValidation } from "./post.validation";
 import auth from "../../middlewares/auth";
 import { USER_ROLE } from "../user/user.const";
-import { USER_ROLE } from "./../user/user.const";
 
 const router = Router();
 
