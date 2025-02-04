@@ -6,7 +6,7 @@ import { USER_ROLE } from "../user/user.const";
 const router = Router();
 
 router.post("/login", AuthControllers.loginUser);
-router.post(
+router.put(
   "/change-password",
   auth(USER_ROLE.admin, USER_ROLE.user),
   AuthControllers.changePassword,

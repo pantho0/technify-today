@@ -8,6 +8,7 @@ export interface IUser {
   lastName: string;
   email: string;
   password: string;
+  passwordChangedAt?: Date;
   role?: "admin" | "user";
   profileImage?: string;
   following?: Types.ObjectId[] | [];
