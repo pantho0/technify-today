@@ -100,6 +100,21 @@ userSchema.statics.isJWTIssuedBeforePasswordChanged = function (
   return jwtIssuedTimeStamp < passwordChangedTime;
 };
 
+userSchema.pre("find", function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+userSchema.pre("findOne", function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+userSchema.pre("aggregate", function (next) {
+  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
+  next();
+});
+
 userSchema.virtual("fullName").get(function () {
   return `${this?.firstName} ${this?.middleName} ${this?.lastName}`;
 });
