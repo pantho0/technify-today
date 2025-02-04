@@ -7,7 +7,7 @@ import { USER_ROLE } from "./user.const";
 
 const router = Router();
 
-router.get("/", auth(USER_ROLE.admin), UserControllers.getAllUser);
+router.get("/", UserControllers.getAllUser);
 router.post(
   "/create-user",
   validateRequest(UserValidation.userValidationSchema),

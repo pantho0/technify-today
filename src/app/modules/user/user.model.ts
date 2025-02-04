@@ -60,6 +60,9 @@ const userSchema = new Schema<IUser, UserModel>(
   },
   {
     timestamps: true,
+    toJSON: {
+      virtuals: true,
+    },
   },
 );
 
@@ -84,5 +87,9 @@ userSchema.statics.isPasswordMatched = async function (
 ) {
   return await bcrypt.compare(plainTextPassword, hashedPassword);
 };
+
+userSchema.virtual("fullName").get(function () {
+  return `${this?.firstName} ${this?.middleName} ${this?.lastName}`;
+});
 
 export const User = model<IUser, UserModel>("User", userSchema);
