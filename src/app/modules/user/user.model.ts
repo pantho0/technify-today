@@ -91,6 +91,15 @@ userSchema.statics.isPasswordMatched = async function (
   return await bcrypt.compare(plainTextPassword, hashedPassword);
 };
 
+userSchema.statics.isJWTIssuedBeforePasswordChanged = function (
+  passwordChangedTimeStamp,
+  jwtIssuedTimeStamp,
+) {
+  const passwordChangedTime =
+    new Date(passwordChangedTimeStamp).getTime() / 1000;
+  return jwtIssuedTimeStamp < passwordChangedTime;
+};
+
 userSchema.virtual("fullName").get(function () {
   return `${this?.firstName} ${this?.middleName} ${this?.lastName}`;
 });
