@@ -14,5 +14,6 @@ router.post(
   UserControllers.createUser,
 );
 router.get("/me", auth(USER_ROLE.admin, USER_ROLE.user), UserControllers.getMe);
+router.put("/delete-user", auth(USER_ROLE.admin), UserControllers.deleteUser);
 
 export const UserRoutes = router;

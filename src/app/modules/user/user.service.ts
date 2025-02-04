@@ -35,8 +35,27 @@ const getMeFromDB = async (id: string) => {
   return result;
 };
 
+const deleteUserFromDB = async (payload: { email: string }) => {
+  const user = await User.isUserExists(payload.email);
+  if (!user) {
+    throw new AppError(status.NOT_FOUND, "User not found");
+  }
+  const result = await User.findOneAndUpdate(
+    { email: payload.email },
+    {
+      isDeleted: true,
+    },
+    {
+      new: true,
+    },
+  );
+
+  return result;
+};
+
 export const UserServices = {
   createUserIntoDB,
   getAllUserFromDB,
   getMeFromDB,
+  deleteUserFromDB,
 };
