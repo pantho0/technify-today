@@ -15,5 +15,6 @@ router.post(
 );
 router.get("/me", auth(USER_ROLE.admin, USER_ROLE.user), UserControllers.getMe);
 router.put("/delete-user", auth(USER_ROLE.admin), UserControllers.deleteUser);
+router.put("/block-user", auth(USER_ROLE.admin), UserControllers.blockUser);
 
 export const UserRoutes = router;

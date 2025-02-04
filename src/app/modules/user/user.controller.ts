@@ -45,9 +45,20 @@ const deleteUser = catchAsync(async (req, res) => {
   });
 });
 
+const blockUser = catchAsync(async (req, res) => {
+  const result = await UserServices.blockUserFromDB(req.body);
+  sendResponse(res, {
+    statusCode: status.OK,
+    success: true,
+    message: "User blocked successfully",
+    data: result,
+  });
+});
+
 export const UserControllers = {
   createUser,
   getAllUser,
   getMe,
   deleteUser,
+  blockUser,
 };
