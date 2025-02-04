@@ -25,7 +25,7 @@ const moduleRoutes = [
     route: FollowerRoutes,
   },
   {
-    path: "/login",
+    path: "/auth",
     route: AuthRoutes,
   },
 ];
