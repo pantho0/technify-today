@@ -80,7 +80,41 @@ const changeUserPassIntoDB = async (
   return null;
 };
 
+const forgetPassword = async (payload: { email: string }) => {
+  const user = await User.isUserExists(payload.email);
+  if (!user) {
+    throw new AppError(status.NOT_FOUND, "User not found");
+  }
+
+  const isDeleted = user?.isDeleted;
+  if (isDeleted) {
+    throw new AppError(status.GONE, "User is deleted");
+  }
+
+  const isBlocked = user?.isBlocked;
+  if (isBlocked) {
+    throw new AppError(status.FORBIDDEN, "User is blocked");
+  }
+
+  const jwtPayload = {
+    userId: user?._id,
+    email: user?.email,
+    role: user?.role,
+  };
+
+  const resetToken = createToken(
+    jwtPayload,
+    config.jwt_access_secret as string,
+    "10m",
+  );
+
+  const resetLink = `${config.reset_ui_link}?email=${user?.email}&token=${resetToken}`;
+
+  console.log(resetLink);
+};
+
 export const AuthServices = {
   loginUser,
   changeUserPassIntoDB,
+  forgetPassword,
 };

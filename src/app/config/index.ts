@@ -11,4 +11,5 @@ export default {
   jwt_access_secret_exp: process.env.JWT_ACCESS_SECRET_EXP,
   jwt_refresh_secret: process.env.JWT_REFRESH_SECRET,
   jwt_refresh_secret_exp: process.env.JWT_REFRESH_SECRET_EXP,
+  reset_ui_link: process.env.RESET_UI_LINK,
 };
