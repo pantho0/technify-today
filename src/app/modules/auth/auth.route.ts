@@ -6,6 +6,7 @@ import { USER_ROLE } from "../user/user.const";
 const router = Router();
 
 router.post("/login", AuthControllers.loginUser);
+router.post("/refresh-token", AuthControllers.loginUser);
 router.post("/forget-password", AuthControllers.forgetPassword);
 router.post("/reset-password", AuthControllers.resetPassword);
 router.put(

@@ -160,9 +160,19 @@ const resetPassword = async (
   );
 };
 
+const generateAccessTokenByRefreshToken = async (token: string) => {
+  const decoded = jwt.verify(
+    token,
+    config.jwt_refresh_secret as string,
+  ) as JwtPayload;
+
+  console.log(decoded);
+};
+
 export const AuthServices = {
   loginUser,
   changeUserPassIntoDB,
   forgetPassword,
   resetPassword,
+  generateAccessTokenByRefreshToken,
 };

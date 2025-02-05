@@ -45,8 +45,8 @@ const forgetPassword = catchAsync(async (req, res) => {
 });
 
 const resetPassword = catchAsync(async (req, res) => {
-  const token = req.headers.authorization;
-  const result = await AuthServices.resetPassword(req.body, token);
+  const token = req?.headers?.authorization;
+  const result = await AuthServices.resetPassword(req.body, token as string);
 
   sendResponse(res, {
     statusCode: status.OK,
@@ -56,9 +56,22 @@ const resetPassword = catchAsync(async (req, res) => {
   });
 });
 
+const getAccessTokenByRefreshToken = catchAsync(async (req, res) => {
+  const { refreshToken } = req.cookies;
+  const result =
+    await AuthServices.generateAccessTokenByRefreshToken(refreshToken);
+  sendResponse(res, {
+    statusCode: status.OK,
+    success: true,
+    message: "Access Token Generated Successfully",
+    data: result,
+  });
+});
+
 export const AuthControllers = {
   loginUser,
   changePassword,
   forgetPassword,
   resetPassword,
+  getAccessTokenByRefreshToken,
 };
