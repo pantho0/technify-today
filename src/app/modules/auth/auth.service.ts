@@ -6,6 +6,7 @@ import { IUserLogin } from "./auth.interface";
 import { createToken } from "./auth.utils";
 import { JwtPayload } from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import { sendEmail } from "../../utils/sendEMail";
 
 const loginUser = async (payload: IUserLogin) => {
   const user = await User.isUserExists(payload.email);
@@ -110,7 +111,7 @@ const forgetPassword = async (payload: { email: string }) => {
 
   const resetLink = `${config.reset_ui_link}?email=${user?.email}&token=${resetToken}`;
 
-  console.log(resetLink);
+  sendEmail(user?.email, resetLink);
 };
 
 export const AuthServices = {
