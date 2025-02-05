@@ -25,9 +25,14 @@ const getPosts = catchAsync(async (req, res) => {
 });
 
 const updatePost = catchAsync(async (req, res) => {
+  const credentials = req.user;
   const { id } = req.params;
   const updatedPostData = req.body;
-  const result = await PostServices.postUpdateIntoDB(id, updatedPostData);
+  const result = await PostServices.postUpdateIntoDB(
+    credentials,
+    id,
+    updatedPostData,
+  );
   sendResponse(res, {
     statusCode: status.OK,
     success: true,

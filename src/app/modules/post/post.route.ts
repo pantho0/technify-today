@@ -11,7 +11,7 @@ router.get("/", PostControllers.getPosts);
 router.patch(
   "/update-post/:id",
   auth(USER_ROLE.admin, USER_ROLE.user),
-  validateRequest(PostValidation.updatePostValidationSchema),
+  // validateRequest(PostValidation.updatePostValidationSchema),
   PostControllers.updatePost,
 );
 router.put(

@@ -1,3 +1,4 @@
+import { Types } from "mongoose";
 import QueryBuilder from "../../builder/QueryBuilder";
 import { IPost } from "./post.interface";
 import { Post } from "./post.model";
@@ -23,7 +24,22 @@ const getPostsFromDB = async (query: Record<string, unknown>) => {
   return result;
 };
 
-const postUpdateIntoDB = async (id: string, payload: Partial<IPost>) => {
+const postUpdateIntoDB = async (
+  credentials: {
+    userId: Types.ObjectId;
+    role: string;
+    email: string;
+    iat: number;
+    exp: number;
+  },
+  id: string,
+  payload: Partial<IPost>,
+) => {
+  const post = await Post.findById(id);
+
+  if (post?.user._id !== credentials.userId) {
+    throw new Error("You are not the owner of this post");
+  }
   const result = await Post.findByIdAndUpdate(id, payload, { new: true });
   return result;
 };
