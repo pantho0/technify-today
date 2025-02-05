@@ -7,6 +7,7 @@ import { createToken } from "./auth.utils";
 import { JwtPayload } from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { sendEmail } from "../../utils/sendEMail";
+import jwt from "jsonwebtoken";
 
 const loginUser = async (payload: IUserLogin) => {
   const user = await User.isUserExists(payload.email);
@@ -114,8 +115,54 @@ const forgetPassword = async (payload: { email: string }) => {
   sendEmail(user?.email, resetLink);
 };
 
+const resetPassword = async (
+  payload: { email: string; newPassword: string },
+  token: string,
+) => {
+  const user = await User.isUserExists(payload?.email);
+  if (!user) {
+    throw new AppError(status.NOT_FOUND, "User not found");
+  }
+
+  const isDeleted = user?.isDeleted;
+  if (isDeleted) {
+    throw new AppError(status.GONE, "User is deleted");
+  }
+
+  const isBlocked = user?.isBlocked;
+  if (isBlocked) {
+    throw new AppError(status.FORBIDDEN, "User is blocked");
+  }
+
+  const decoded = jwt.verify(
+    token,
+    config.jwt_access_secret as string,
+  ) as JwtPayload;
+
+  if (payload?.email !== decoded.email) {
+    throw new AppError(status.FORBIDDEN, "Invalid email");
+  }
+
+  const newHashedPassword = await bcrypt.hash(
+    payload.newPassword,
+    Number(config.bcrypt_salt),
+  );
+
+  await User.findOneAndUpdate(
+    {
+      email: decoded?.email,
+      role: decoded?.role,
+    },
+    {
+      password: newHashedPassword,
+      passwordChangedAt: new Date(),
+    },
+  );
+};
+
 export const AuthServices = {
   loginUser,
   changeUserPassIntoDB,
   forgetPassword,
+  resetPassword,
 };

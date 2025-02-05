@@ -7,6 +7,7 @@ const router = Router();
 
 router.post("/login", AuthControllers.loginUser);
 router.post("/forget-password", AuthControllers.forgetPassword);
+router.post("/reset-password", AuthControllers.resetPassword);
 router.put(
   "/change-password",
   auth(USER_ROLE.admin, USER_ROLE.user),
