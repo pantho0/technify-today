@@ -8,6 +8,7 @@ import { JwtPayload } from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { sendEmail } from "../../utils/sendEMail";
 import jwt from "jsonwebtoken";
+import { User } from "./../user/user.model";
 
 const loginUser = async (payload: IUserLogin) => {
   const user = await User.isUserExists(payload.email);
@@ -166,7 +167,45 @@ const generateAccessTokenByRefreshToken = async (token: string) => {
     config.jwt_refresh_secret as string,
   ) as JwtPayload;
 
-  console.log(decoded);
+  const { email, iat } = decoded;
+
+  const user = await User.isUserExists(email);
+  if (!user) {
+    throw new AppError(status.NOT_FOUND, "User not found");
+  }
+
+  const isDeleted = user?.isDeleted;
+  if (isDeleted) {
+    throw new AppError(status.GONE, "User is deleted");
+  }
+  const isBlocked = user?.isBlocked;
+  if (isBlocked) {
+    throw new AppError(status.FORBIDDEN, "User is blocked");
+  }
+
+  if (
+    user?.passwordChangedAt &&
+    User.isJWTIssuedBeforePasswordChanged(user.passwordChangedAt, iat as number)
+  ) {
+    throw new AppError(
+      status.FORBIDDEN,
+      "Your password has been changed, please login again!",
+    );
+  }
+
+  const jwtPayload = {
+    userId: user?._id,
+    role: user?.role,
+    email: user?.email,
+  };
+
+  const accessToken = createToken(
+    jwtPayload,
+    config.jwt_access_secret as string,
+    config.jwt_access_secret_exp as string,
+  );
+
+  return accessToken;
 };
 
 export const AuthServices = {
