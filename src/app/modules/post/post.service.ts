@@ -20,8 +20,9 @@ const getPostsFromDB = async (query: Record<string, unknown>) => {
     .paginate()
     .fields();
 
+  const meta = await postQuery.countTotal();
   const result = await postQuery.modelQuery;
-  return result;
+  return { meta, result };
 };
 
 const postUpdateIntoDB = async (
