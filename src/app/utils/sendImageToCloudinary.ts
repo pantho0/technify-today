@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { v2 as cloudinary, UploadApiErrorResponse } from "cloudinary";
 import config from "../config";
 import fs from "fs";
@@ -31,7 +32,7 @@ export const sendImageToCloudinary = async (
     });
   }
 
-  return uploadResult;
+  return uploadResult as UploadApiErrorResponse | undefined;
 };
 
 const storage = multer.diskStorage({
