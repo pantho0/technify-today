@@ -2,7 +2,7 @@ import { Types } from "mongoose";
 
 export interface IPost {
   user: Types.ObjectId;
-  image: string;
+  image?: string;
   title: string;
   category: string;
   details: string;

@@ -11,8 +11,8 @@ const createPostValidationSchema = z.object({
       .string({
         required_error: "Image URL is required",
       })
-      .url("Invalid image URL format"),
-
+      .url("Invalid image URL format")
+      .optional(),
     title: z
       .string({
         required_error: "Title is required",

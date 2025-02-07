@@ -9,7 +9,6 @@ const postSchema = new Schema<IPost>(
     },
     image: {
       type: String,
-      required: true,
     },
     title: {
       type: String,
