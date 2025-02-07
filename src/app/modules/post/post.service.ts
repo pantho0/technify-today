@@ -2,9 +2,18 @@ import { Types } from "mongoose";
 import QueryBuilder from "../../builder/QueryBuilder";
 import { IPost } from "./post.interface";
 import { Post } from "./post.model";
+import { sendImageToCloudinary } from "../../utils/sendImageToCloudinary";
 
-const createPostIntoDB = async (payload: IPost) => {
+const createPostIntoDB = async (file: Express.Multer.File, payload: IPost) => {
+  if (file) {
+    const imageName = `${payload.title}-${Date.now()}`;
+    const path = file?.path;
+    const imageUrl = await sendImageToCloudinary(imageName, path);
+    payload.image = imageUrl?.secure_url as string;
+  }
+
   const result = await Post.create(payload);
+
   return result;
 };
 

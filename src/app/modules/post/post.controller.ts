@@ -2,10 +2,11 @@ import status from "http-status";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { PostServices } from "./post.service";
+import { ObjectId } from "mongodb";
 
 const createPost = catchAsync(async (req, res) => {
   const postData = req.body;
-  const result = await PostServices.createPostIntoDB(postData);
+  const result = await PostServices.createPostIntoDB(req.file, postData);
   sendResponse(res, {
     statusCode: status.OK,
     success: true,
@@ -25,7 +26,13 @@ const getPosts = catchAsync(async (req, res) => {
 });
 
 const updatePost = catchAsync(async (req, res) => {
-  const credentials = req.user;
+  const credentials = req.user as {
+    userId: ObjectId;
+    role: string;
+    email: string;
+    iat: number;
+    exp: number;
+  };
   const { id } = req.params;
   const updatedPostData = req.body;
   const result = await PostServices.postUpdateIntoDB(
