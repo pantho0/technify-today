@@ -35,8 +35,9 @@ const getPostsFromDB = async (query: Record<string, unknown>) => {
 };
 
 const postUpdateIntoDB = async (
+  file: Express.Multer.File,
   credentials: {
-    userId: Types.ObjectId;
+    userId: string;
     role: string;
     email: string;
     iat: number;
@@ -47,9 +48,17 @@ const postUpdateIntoDB = async (
 ) => {
   const post = await Post.findById(id);
 
-  if (post?.user._id !== credentials.userId) {
+  if (post?.user._id?.toString() !== credentials.userId) {
     throw new Error("You are not the owner of this post");
   }
+
+  if (file) {
+    const imageName = `${payload?.title ? payload.title : post?.title}-${Date.now()}`;
+    const path = file?.path;
+    const imageUrl = await sendImageToCloudinary(imageName, path);
+    payload.image = imageUrl?.secure_url as string;
+  }
+
   const result = await Post.findByIdAndUpdate(id, payload, { new: true });
   return result;
 };

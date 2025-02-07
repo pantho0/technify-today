@@ -12,6 +12,11 @@ router.get("/", PostControllers.getPosts);
 router.patch(
   "/update-post/:id",
   auth(USER_ROLE.admin, USER_ROLE.user),
+  upload.single("file"),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = JSON.parse(req.body.data);
+    next();
+  },
   validateRequest(PostValidation.updatePostValidationSchema),
   PostControllers.updatePost,
 );

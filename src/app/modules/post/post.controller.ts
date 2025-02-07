@@ -6,7 +6,10 @@ import { ObjectId } from "mongodb";
 
 const createPost = catchAsync(async (req, res) => {
   const postData = req.body;
-  const result = await PostServices.createPostIntoDB(req.file, postData);
+  const result = await PostServices.createPostIntoDB(
+    req.file as Express.Multer.File,
+    postData,
+  );
   sendResponse(res, {
     statusCode: status.OK,
     success: true,
@@ -36,6 +39,7 @@ const updatePost = catchAsync(async (req, res) => {
   const { id } = req.params;
   const updatedPostData = req.body;
   const result = await PostServices.postUpdateIntoDB(
+    req.file as Express.Multer.File,
     credentials,
     id,
     updatedPostData,
