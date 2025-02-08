@@ -2,7 +2,7 @@ import status from "http-status";
 import catchAsync from "../../utils/catchAsync";
 import sendResponse from "../../utils/sendResponse";
 import { PostServices } from "./post.service";
-import { ObjectId } from "mongodb";
+import { ICredentials } from "./post.interface";
 
 const createPost = catchAsync(async (req, res) => {
   const postData = req.body;
@@ -29,13 +29,7 @@ const getPosts = catchAsync(async (req, res) => {
 });
 
 const updatePost = catchAsync(async (req, res) => {
-  const credentials = req.user as {
-    userId: ObjectId;
-    role: string;
-    email: string;
-    iat: number;
-    exp: number;
-  };
+  const credentials = req.user as ICredentials;
   const { id } = req.params;
   const updatedPostData = req.body;
   const result = await PostServices.postUpdateIntoDB(

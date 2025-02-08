@@ -13,3 +13,11 @@ export interface IPost {
   isDeleted: boolean;
   createdAt: string;
 }
+
+export interface ICredentials {
+  userId: string;
+  role: string;
+  email: string;
+  iat: number;
+  exp: number;
+}

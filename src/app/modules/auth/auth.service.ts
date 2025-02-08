@@ -8,7 +8,6 @@ import { JwtPayload } from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { sendEmail } from "../../utils/sendEMail";
 import jwt from "jsonwebtoken";
-import { User } from "./../user/user.model";
 
 const loginUser = async (payload: IUserLogin) => {
   const user = await User.isUserExists(payload.email);

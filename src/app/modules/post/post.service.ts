@@ -1,6 +1,5 @@
-import { Types } from "mongoose";
 import QueryBuilder from "../../builder/QueryBuilder";
-import { IPost } from "./post.interface";
+import { ICredentials, IPost } from "./post.interface";
 import { Post } from "./post.model";
 import { sendImageToCloudinary } from "../../utils/sendImageToCloudinary";
 
@@ -36,13 +35,7 @@ const getPostsFromDB = async (query: Record<string, unknown>) => {
 
 const postUpdateIntoDB = async (
   file: Express.Multer.File,
-  credentials: {
-    userId: string;
-    role: string;
-    email: string;
-    iat: number;
-    exp: number;
-  },
+  credentials: ICredentials,
   id: string,
   payload: Partial<IPost>,
 ) => {
