@@ -12,11 +12,20 @@ router.post(
   validateRequest(AuthValidationSchemas.userLoginValidatin),
   AuthControllers.loginUser,
 );
-router.post("/refresh-token", AuthControllers.getAccessTokenByRefreshToken);
-router.post("/forget-password", AuthControllers.forgetPassword);
+router.post(
+  "/refresh-token",
+  validateRequest(AuthValidationSchemas.refreshTokenValidation),
+  AuthControllers.getAccessTokenByRefreshToken,
+);
+router.post(
+  "/forget-password",
+  validateRequest(AuthValidationSchemas.forgetPasswordValidation),
+  AuthControllers.forgetPassword,
+);
 router.post("/reset-password", AuthControllers.resetPassword);
 router.put(
   "/change-password",
+  validateRequest(AuthValidationSchemas.changePasswordValidation),
   auth(USER_ROLE.admin, USER_ROLE.user),
   AuthControllers.changePassword,
 );
