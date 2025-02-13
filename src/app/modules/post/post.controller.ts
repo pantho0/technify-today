@@ -28,6 +28,17 @@ const getPosts = catchAsync(async (req, res) => {
   });
 });
 
+const getSinglePost = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const result = await PostServices.getSinglePostFromDB(id);
+  sendResponse(res, {
+    statusCode: status.OK,
+    success: true,
+    message: "Post retrived successfully",
+    data: result,
+  });
+});
+
 const updatePost = catchAsync(async (req, res) => {
   const credentials = req.user as ICredentials;
   const { id } = req.params;
@@ -86,4 +97,5 @@ export const PostControllers = {
   deletePost,
   upVote,
   downVote,
+  getSinglePost,
 };

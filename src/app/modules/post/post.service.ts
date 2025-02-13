@@ -16,6 +16,11 @@ const createPostIntoDB = async (file: Express.Multer.File, payload: IPost) => {
   return result;
 };
 
+const getSinglePostFromDB = async (id: string) => {
+  const result = await Post.findById(id).populate(["user", "comments"]);
+  return result;
+};
+
 const getPostsFromDB = async (query: Record<string, unknown>) => {
   const searchableFields = ["title"];
   const postQuery = new QueryBuilder(
@@ -96,4 +101,5 @@ export const PostServices = {
   deletePostFromDB,
   addUpVoteIntoPost,
   addDownVoteIntoPost,
+  getSinglePostFromDB,
 };

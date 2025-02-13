@@ -9,6 +9,7 @@ import { upload } from "../../utils/sendImageToCloudinary";
 const router = Router();
 
 router.get("/", PostControllers.getPosts);
+router.get("/:id", PostControllers.getSinglePost);
 router.patch(
   "/update-post/:id",
   auth(USER_ROLE.admin, USER_ROLE.user),
