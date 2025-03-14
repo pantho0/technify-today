@@ -7,7 +7,7 @@ const router = Router();
 
 router.post(
   "/",
-  validateRequest(CommentValidation.CommenValidationtSchema),
+  // validateRequest(CommentValidation.CommenValidationtSchema),
   CommentControllers.postComment,
 );
 

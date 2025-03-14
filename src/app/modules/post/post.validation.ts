@@ -33,8 +33,7 @@ const createPostValidationSchema = z.object({
         required_error: "Details are required",
       })
       .trim()
-      .min(10, "Details must be at least 10 characters")
-      .max(1000, "Details cannot exceed 1000 characters"),
+      .min(10, "Details must be at least 10 characters"),
 
     isPremium: z.boolean().optional().default(false),
 

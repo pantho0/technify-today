@@ -57,8 +57,21 @@ const updatePost = catchAsync(async (req, res) => {
   });
 });
 
+const getOwnPosts = catchAsync(async (req, res) => {
+  const credentials = req.user as ICredentials;
+
+  const result = await PostServices.getOwnPostsFromDB(credentials);
+  sendResponse(res, {
+    statusCode: status.OK,
+    success: true,
+    message: "Posts retrived successfully",
+    data: result,
+  });
+});
+
 const upVote = catchAsync(async (req, res) => {
   const { postId, userId } = req.body;
+  console.log(postId, userId);
   const result = await PostServices.addUpVoteIntoPost(postId, userId);
   sendResponse(res, {
     statusCode: status.OK,
@@ -98,4 +111,5 @@ export const PostControllers = {
   upVote,
   downVote,
   getSinglePost,
+  getOwnPosts,
 };

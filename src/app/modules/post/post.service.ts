@@ -17,7 +17,18 @@ const createPostIntoDB = async (file: Express.Multer.File, payload: IPost) => {
 };
 
 const getSinglePostFromDB = async (id: string) => {
-  const result = await Post.findById(id).populate(["user", "comments"]);
+  const result = await Post.findById(id).populate("user").populate({
+    path: "comments",
+    populate: "user",
+  });
+  return result;
+};
+
+const getOwnPostsFromDB = async (credentials: ICredentials) => {
+  const result = await Post.find({ user: credentials.userId }).populate([
+    "user",
+    "comments",
+  ]);
   return result;
 };
 
@@ -102,4 +113,5 @@ export const PostServices = {
   addUpVoteIntoPost,
   addDownVoteIntoPost,
   getSinglePostFromDB,
+  getOwnPostsFromDB,
 };
