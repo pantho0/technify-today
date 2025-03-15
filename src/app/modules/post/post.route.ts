@@ -23,7 +23,7 @@ router.patch(
     req.body = JSON.parse(req.body.data);
     next();
   },
-  validateRequest(PostValidation.updatePostValidationSchema),
+  // validateRequest(PostValidation.updatePostValidationSchema),
   PostControllers.updatePost,
 );
 router.put(
