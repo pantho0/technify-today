@@ -3,7 +3,7 @@ import config from "../../config";
 import AppError from "../../errors/AppError";
 import { User } from "../user/user.model";
 import { IUserLogin } from "./auth.interface";
-import { createToken } from "./auth.utils";
+import { createToken, verifyToken } from "./auth.utils";
 import { JwtPayload } from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { sendEmail } from "../../utils/sendEMail";
@@ -110,7 +110,7 @@ const forgetPassword = async (payload: { email: string }) => {
     "10m",
   );
 
-  const resetLink = `${config.reset_ui_link}?email=${user?.email}&token=${resetToken}`;
+  const resetLink = `${config.reset_ui_link}/reset-password?email=${user?.email}&token=${resetToken}`;
 
   sendEmail(user?.email, resetLink);
 };
@@ -134,7 +134,7 @@ const resetPassword = async (
     throw new AppError(status.FORBIDDEN, "User is blocked");
   }
 
-  const decoded = jwt.verify(
+  const decoded = verifyToken(
     token,
     config.jwt_access_secret as string,
   ) as JwtPayload;
