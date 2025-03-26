@@ -100,10 +100,10 @@ userSchema.statics.isJWTIssuedBeforePasswordChanged = function (
   return jwtIssuedTimeStamp < passwordChangedTime;
 };
 
-userSchema.pre("find", function (next) {
-  this.find({ isDeleted: { $ne: true } });
-  next();
-});
+// userSchema.pre("find", function (next) {
+//   this.find({ isDeleted: { $ne: true } });
+//   next();
+// });
 
 userSchema.pre("findOne", function (next) {
   this.find({ isDeleted: { $ne: true } });
