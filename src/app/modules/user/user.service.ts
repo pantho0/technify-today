@@ -43,7 +43,7 @@ const deleteUserFromDB = async (payload: { email: string }) => {
   const result = await User.findOneAndUpdate(
     { email: payload.email },
     {
-      isDeleted: true,
+      isDeleted: !user?.isDeleted,
     },
     {
       new: true,
