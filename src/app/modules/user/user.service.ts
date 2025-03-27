@@ -61,7 +61,7 @@ const blockUserFromDB = async (payload: { email: string }) => {
   const result = await User.findOneAndUpdate(
     { email: payload.email },
     {
-      isBlocked: true,
+      isBlocked: !user?.isBlocked,
     },
     {
       new: true,
