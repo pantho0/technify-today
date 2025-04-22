@@ -2,13 +2,22 @@ import QueryBuilder from "../../builder/QueryBuilder";
 import { ICredentials, IPost } from "./post.interface";
 import { Post } from "./post.model";
 import { sendImageToCloudinary } from "../../utils/sendImageToCloudinary";
+import AppError from "../../errors/AppError";
+import status from "http-status";
 
 const createPostIntoDB = async (file: Express.Multer.File, payload: IPost) => {
   if (file) {
-    const imageName = `${payload.title}-${Date.now()}`;
+    const imageName = `${payload.title.slice(0, 4)}-${Date.now()}`;
     const path = file?.path;
     const imageUrl = await sendImageToCloudinary(imageName, path);
     payload.image = imageUrl?.secure_url as string;
+  }
+
+  if (!payload.image) {
+    throw new AppError(
+      status.BAD_REQUEST,
+      "Image upload failed! Try with different image",
+    );
   }
 
   const result = await Post.create(payload);
