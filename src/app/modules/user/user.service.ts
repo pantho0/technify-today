@@ -1,4 +1,3 @@
-import { path } from "path";
 import status from "http-status";
 import AppError from "../../errors/AppError";
 import { IUser } from "./user.interface";
