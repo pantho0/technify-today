@@ -24,6 +24,7 @@ const loginUser = async (payload: IUserLogin) => {
     userId: user?._id,
     role: user?.role,
     email: user?.email,
+    image: user?.profileImage,
   };
 
   const accessToken = createToken(

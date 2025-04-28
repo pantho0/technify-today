@@ -3,7 +3,7 @@ import { TUserRole } from "../modules/user/user.interface";
 import catchAsync from "../utils/catchAsync";
 import AppError from "../errors/AppError";
 import status from "http-status";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import { JwtPayload } from "jsonwebtoken";
 import config from "../config";
 import { User } from "../modules/user/user.model";
 import { verifyToken } from "../modules/auth/auth.utils";
