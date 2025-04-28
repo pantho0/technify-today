@@ -1,7 +1,9 @@
+import { path } from "path";
 import status from "http-status";
 import AppError from "../../errors/AppError";
 import { IUser } from "./user.interface";
 import { User } from "./user.model";
+import { sendImageToCloudinary } from "../../utils/sendImageToCloudinary";
 
 const createUserIntoDB = async (payload: IUser) => {
   const isExist = await User.isUserExists(payload.email);
@@ -71,10 +73,35 @@ const blockUserFromDB = async (payload: { email: string }) => {
   return result;
 };
 
+const updateProfilePhotoIntoDB = async (
+  file: Express.Multer.File,
+  userId: string,
+) => {
+  const imageName = `useImg-${Date.now()}`;
+  const path = file.path;
+  const imageUrl = await sendImageToCloudinary(imageName, path);
+  if (!imageUrl) {
+    throw new AppError(
+      status.BAD_REQUEST,
+      "Image upload failed! Try with different image",
+    );
+  }
+  const imageSecureUrl = imageUrl?.secure_url;
+
+  const user = User.findByIdAndUpdate(userId, {
+    $set: {
+      profileImage: imageSecureUrl,
+    },
+  });
+
+  return user;
+};
+
 export const UserServices = {
   createUserIntoDB,
   getAllUserFromDB,
   getMeFromDB,
   deleteUserFromDB,
   blockUserFromDB,
+  updateProfilePhotoIntoDB,
 };

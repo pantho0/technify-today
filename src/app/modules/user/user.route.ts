@@ -1,9 +1,10 @@
-import { Router } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import { UserControllers } from "./user.controller";
 import validateRequest from "../../middlewares/validateRequest";
 import { UserValidation } from "./user.validation";
 import auth from "../../middlewares/auth";
 import { USER_ROLE } from "./user.const";
+import { upload } from "../../utils/sendImageToCloudinary";
 
 const router = Router();
 
@@ -16,5 +17,15 @@ router.post(
 router.get("/me", auth(USER_ROLE.admin, USER_ROLE.user), UserControllers.getMe);
 router.put("/delete-user", auth(USER_ROLE.admin), UserControllers.deleteUser);
 router.put("/block-user", auth(USER_ROLE.admin), UserControllers.blockUser);
+router.put(
+  "/update-profile-picture",
+  auth(USER_ROLE.admin, USER_ROLE.user),
+  upload.single("file"),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = JSON.parse(req.body.data);
+    next();
+  },
+  UserControllers.uploadImage,
+);
 
 export const UserRoutes = router;

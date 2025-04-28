@@ -55,10 +55,25 @@ const blockUser = catchAsync(async (req, res) => {
   });
 });
 
+const uploadImage = catchAsync(async (req, res) => {
+  const { userId } = req.user;
+  const result = await UserServices.updateProfilePhotoIntoDB(
+    req.file as Express.Multer.File,
+    userId,
+  );
+  sendResponse(res, {
+    statusCode: status.OK,
+    success: true,
+    message: "Profile photo uploaded successfully",
+    data: result,
+  });
+});
+
 export const UserControllers = {
   createUser,
   getAllUser,
   getMe,
   deleteUser,
   blockUser,
+  uploadImage,
 };
