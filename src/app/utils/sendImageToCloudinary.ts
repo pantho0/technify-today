@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { v2 as cloudinary, UploadApiErrorResponse } from "cloudinary";
+import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
 import config from "../config";
 import fs from "fs";
 import multer from "multer";
@@ -13,26 +13,25 @@ cloudinary.config({
 export const sendImageToCloudinary = async (
   imageName: string,
   path: string,
-): Promise<UploadApiErrorResponse | undefined> => {
-  const uploadResult = await cloudinary.uploader
-    .upload(path, {
+): Promise<UploadApiResponse | undefined> => {
+  try {
+    const uploadResult = await cloudinary.uploader.upload(path, {
       public_id: imageName,
-    })
-    .catch((error) => {
-      console.log(error);
     });
 
-  if (uploadResult) {
+    return uploadResult as UploadApiResponse;
+  } catch (error) {
+    console.log("Cloudinary upload failed:", error);
+    return undefined;
+  } finally {
     fs.unlink(path, (err) => {
       if (err) {
-        console.log(err);
+        console.log("Failed to delete local file:", err);
       } else {
-        console.log("File deleted");
+        console.log("Temporary file deleted successfully");
       }
     });
   }
-
-  return uploadResult as UploadApiErrorResponse | undefined;
 };
 
 const storage = multer.diskStorage({
