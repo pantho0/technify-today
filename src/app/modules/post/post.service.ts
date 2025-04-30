@@ -33,14 +33,25 @@ const getSinglePostFromDB = async (id: string) => {
   return result;
 };
 
-const getOwnPostsFromDB = async (credentials: ICredentials) => {
-  const result = await Post.find({ user: credentials.userId }).populate([
-    "user",
-    "comments",
-  ]);
-  return result;
-};
+const getOwnPostsFromDB = async (
+  credentials: ICredentials,
+  query: Record<string, unknown>,
+) => {
+  const searchableFields = ["title"];
+  const postQuery = new QueryBuilder(
+    Post.find({ user: credentials.userId }).populate(["user", "comments"]),
+    query,
+  )
+    .search(searchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
 
+  const meta = await postQuery.countTotal();
+  const result = await postQuery.modelQuery;
+  return { meta, result };
+};
 const getPostsFromDB = async (query: Record<string, unknown>) => {
   const searchableFields = ["title"];
   const postQuery = new QueryBuilder(

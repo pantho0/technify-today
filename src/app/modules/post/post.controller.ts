@@ -60,7 +60,7 @@ const updatePost = catchAsync(async (req, res) => {
 const getOwnPosts = catchAsync(async (req, res) => {
   const credentials = req.user as ICredentials;
 
-  const result = await PostServices.getOwnPostsFromDB(credentials);
+  const result = await PostServices.getOwnPostsFromDB(credentials, req.query);
   sendResponse(res, {
     statusCode: status.OK,
     success: true,
