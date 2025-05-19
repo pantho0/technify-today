@@ -8,6 +8,8 @@ import { JwtPayload } from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { sendEmail } from "../../utils/sendEMail";
 import jwt from "jsonwebtoken";
+import { IUser } from "../user/user.interface";
+import { IResponse, ISocialLoginUser } from "../../interface";
 
 const loginUser = async (payload: IUserLogin) => {
   const user = await User.isUserExists(payload.email);
@@ -18,6 +20,39 @@ const loginUser = async (payload: IUserLogin) => {
 
   if (!(await User.isPasswordMatched(payload?.password, user!.password))) {
     throw new AppError(status.BAD_REQUEST, "Invalid email or password");
+  }
+
+  const jwtPayload = {
+    userId: user?._id,
+    role: user?.role,
+    email: user?.email,
+    image: user?.profileImage,
+  };
+
+  const accessToken = createToken(
+    jwtPayload,
+    config.jwt_access_secret as string,
+    config.jwt_access_secret_exp as string,
+  );
+
+  const refreshToken = createToken(
+    jwtPayload,
+    config.jwt_refresh_secret as string,
+    config.jwt_refresh_secret_exp as string,
+  );
+
+  return {
+    accessToken,
+    refreshToken,
+  };
+};
+
+const socialLoginUser = async (payload: ISocialLoginUser) => {
+  let user = await User.isUserExists(payload.email);
+
+  if (!user) {
+    const result = await User.create(payload);
+    user = (result as IResponse)?.data as IUser;
   }
 
   const jwtPayload = {
@@ -214,4 +249,5 @@ export const AuthServices = {
   forgetPassword,
   resetPassword,
   generateAccessTokenByRefreshToken,
+  socialLoginUser,
 };

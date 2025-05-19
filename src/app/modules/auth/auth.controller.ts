@@ -25,6 +25,26 @@ const loginUser = catchAsync(async (req, res) => {
   });
 });
 
+const socialLoginUser = catchAsync(async (req, res) => {
+  const result = await AuthServices.socialLoginUser(req.body);
+  const { accessToken, refreshToken } = result;
+  res.cookie("refreshToken", refreshToken, {
+    secure: config.NODE_ENV === "production",
+    httpOnly: true,
+    maxAge: 90 * 24 * 60 * 60 * 1000,
+  });
+
+  sendResponse(res, {
+    statusCode: status.OK,
+    success: true,
+    message: "Login Success",
+    data: {
+      accessToken,
+      refreshToken,
+    },
+  });
+});
+
 const changePassword = catchAsync(async (req, res) => {
   const result = await AuthServices.changeUserPassIntoDB(req.user, req.body);
   sendResponse(res, {
@@ -75,4 +95,5 @@ export const AuthControllers = {
   forgetPassword,
   resetPassword,
   getAccessTokenByRefreshToken,
+  socialLoginUser,
 };

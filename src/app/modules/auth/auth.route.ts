@@ -12,6 +12,13 @@ router.post(
   validateRequest(AuthValidationSchemas.userLoginValidatin),
   AuthControllers.loginUser,
 );
+
+router.post(
+  "/social-login",
+  // validateRequest(AuthValidationSchemas.userLoginValidatin),
+  AuthControllers.socialLoginUser,
+);
+
 router.post(
   "/refresh-token",
   validateRequest(AuthValidationSchemas.refreshTokenValidation),
